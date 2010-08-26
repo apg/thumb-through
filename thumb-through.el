@@ -30,13 +30,12 @@
 
 (require 'thingatpt)
 
-(defconst thumb-through-curl-command (executable-find "curl"))
+(defconst thumb-through-curl-executable (executable-find "curl"))
 
-(defconst thumb-through-html2text-command "/Users/me/bin/html2text.py")
+(defconst thumb-through-html2text-command (executable-find "html2text.py"))
 
 (defconst thumb-through-instapaper-base-url 
   "http://www.instapaper.com/text?u=")
-
 
 (defun thumb-through-get-url ()
   (or (thing-at-point 'url) (read-string "URL: ")))
@@ -52,9 +51,9 @@
                          " 2> /dev/null")))
     (shell-command-to-string command)))
 
-(defun thumb-through ()
+(defun thumb-through (&optional url)
   (interactive)
-  (let ((url (thumb-through-get-url)))
+  (let ((url (or url (thumb-through-get-url))))
     (if url
         (with-current-buffer (get-buffer-create "*thumb-through-output*")
           (let ((contents (thumb-through-get-page url)))
@@ -66,4 +65,3 @@
 (defun thumb-through-region (begin end)
   (interactive "r")
   (thumb-through (buffer-substring begin end)))
-
