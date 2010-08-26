@@ -10,8 +10,8 @@ URL and presents it in a simple manner, similar to [InstaPaper][1] or
 
 ### Requirements
 
-Currently, `thumb-through` relies on [tidy][3] and [curl][4], in lieu of emacs 
-URL and HTML parsing. 
+Currently, `thumb-through` relies on [html2text][3] and [curl][4], in lieu 
+of emacs URL and HTML parsing. 
 
 ### Setup
 
@@ -26,7 +26,11 @@ That's it!
 Mark a URL and `M-x thumb-through-region` will get you a `thumb-through` 
 buffer.
 
-`M-x thumb-through` will prompt you for a URL, and you'll be good to go.
+`M-x thumb-through` will prompt you for a URL, or introspect whatever is at 
+`point`, and you'll be good to go.
+
+
+### This functionality doesn't yet exist, but probably will at some point moving forward.
 
 Within a `thumb-through` buffer, there are a few keybindings that are used to
 navigate to links and headers:
@@ -40,5 +44,5 @@ navigate to links and headers:
 [0]: http://www.gnu.org/licenses/gpl.html
 [1]: http://instapaper.com/
 [2]: http://lab.arc90.com/experiments/readability/
-[3]: http://tidy.sf.net
+[3]: http://www.aaronsw.com/2002/html2text/html2text.py
 [4]: http://curl.haxx.se
