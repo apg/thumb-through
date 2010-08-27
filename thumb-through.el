@@ -31,11 +31,8 @@
 (require 'thingatpt)
 
 (defconst thumb-through-curl-executable (executable-find "curl"))
-
-(defconst thumb-through-html2text-command (executable-find "html2text.py"))
-
-(defconst thumb-through-instapaper-base-url 
-  "http://www.instapaper.com/text?u=")
+(defconst thumb-through-service-url 
+  "http://textplease.appspot.com/text/extract.md?url=")
 
 (defun thumb-through-get-url ()
   (or (thing-at-point 'url) (read-string "URL: ")))
@@ -43,11 +40,9 @@
 (defun thumb-through-get-page (url)
   "Returns an XML version of the URL or nil on any sort of failure"
   ;; need to validate this as a url
-  (let ((command (concat "(" thumb-through-curl-executable " "
-                         (concat thumb-through-instapaper-base-url 
+  (let ((command (concat thumb-through-curl-executable " "
+                         (concat thumb-through-service-url
                                  (url-hexify-string url))
-                         " | "
-                         thumb-through-html2text-command ")"
                          " 2> /dev/null")))
     (shell-command-to-string command)))
 
@@ -59,9 +54,13 @@
           (let ((contents (thumb-through-get-page url)))
             (kill-region (point-min) (point-max))
             (insert contents)
-            (switch-to-buffer (current-buffer))))
+            (switch-to-buffer (current-buffer))
+            (goto-line 1)))
       (message "No url found."))))
 
 (defun thumb-through-region (begin end)
   (interactive "r")
   (thumb-through (buffer-substring begin end)))
+
+(provide 'thumb-through)
+
