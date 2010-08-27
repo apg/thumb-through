@@ -10,7 +10,7 @@ URL and presents it in a simple manner, similar to [InstaPaper][1] or
 
 ### Requirements
 
-Currently, `thumb-through` relies on [html2text][3] and [curl][4], in lieu 
+Currently, `thumb-through` relies on [text please][3] and [curl][4], in lieu 
 of emacs URL and HTML parsing. 
 
 ### Setup
@@ -44,5 +44,5 @@ navigate to links and headers:
 [0]: http://www.gnu.org/licenses/gpl.html
 [1]: http://instapaper.com/
 [2]: http://lab.arc90.com/experiments/readability/
-[3]: http://www.aaronsw.com/2002/html2text/html2text.py
+[3]: http://textplease.appspot.com/
 [4]: http://curl.haxx.se
