@@ -324,7 +324,9 @@
     thumb-through-mode-syntax-table))
 
 (defun thumb-through-get-url ()
-  (or (thing-at-point 'url) (read-string "URL: ")))
+  (if current-prefix-arg
+      (read-string "URL: ")
+    (or (thing-at-point 'url) (read-string "URL: "))))
 
 (defun thumb-through-get-page (url)
   "Returns an XML version of the URL or nil on any sort of failure"
@@ -360,4 +362,3 @@
   (set (make-local-variable 'font-lock-multiline) t))
 
 (provide 'thumb-through)
-
