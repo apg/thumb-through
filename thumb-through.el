@@ -2,7 +2,10 @@
 
 ;; Copyright (C) 2010 Andrew Gwozdziewycz <git@apgwoz.com>
 
-;; Version: 0.1
+;; Markdown style formatting
+;; Copyright (C) 2007, 2008, 2009 Jason Blevins
+
+;; Version: 0.2
 ;; Keywords: html
 
 ;; This file is NOT part of GNU Emacs
@@ -29,10 +32,296 @@
 ;; edit thumb-through-html2text-command to be the location of html2text
 
 (require 'thingatpt)
+(require 'font-lock)
 
 (defconst thumb-through-curl-executable (executable-find "curl"))
 (defconst thumb-through-service-url 
   "http://textplease.appspot.com/text/extract.md?url=")
+
+(defvar thumb-through-italic-face 'thumb-through-italic-face
+  "Face name to use for italic text.")
+
+(defvar thumb-through-bold-face 'thumb-through-bold-face
+  "Face name to use for bold text.")
+
+(defvar thumb-through-header-face 'thumb-through-header-face
+  "Face name to use as a base for headers.")
+
+(defvar thumb-through-header-face-1 'thumb-through-header-face-1
+  "Face name to use for level-1 headers.")
+
+(defvar thumb-through-header-face-2 'thumb-through-header-face-2
+  "Face name to use for level-2 headers.")
+
+(defvar thumb-through-header-face-3 'thumb-through-header-face-3
+  "Face name to use for level-3 headers.")
+
+(defvar thumb-through-header-face-4 'thumb-through-header-face-4
+  "Face name to use for level-4 headers.")
+
+(defvar thumb-through-header-face-5 'thumb-through-header-face-5
+  "Face name to use for level-5 headers.")
+
+(defvar thumb-through-header-face-6 'thumb-through-header-face-6
+  "Face name to use for level-6 headers.")
+
+(defvar thumb-through-inline-code-face 'thumb-through-inline-code-face
+  "Face name to use for inline code.")
+
+(defvar thumb-through-list-face 'thumb-through-list-face
+  "Face name to use for list markers.")
+
+(defvar thumb-through-blockquote-face 'thumb-through-blockquote-face
+  "Face name to use for blockquote.")
+
+(defvar thumb-through-pre-face 'thumb-through-pre-face
+  "Face name to use for preformatted text.")
+
+(defvar thumb-through-link-face 'thumb-through-link-face
+  "Face name to use for links.")
+
+(defvar thumb-through-reference-face 'thumb-through-reference-face
+  "Face name to use for reference.")
+
+(defvar thumb-through-url-face 'thumb-through-url-face
+  "Face name to use for URLs.")
+
+(defvar thumb-through-link-title-face 'thumb-through-link-title-face
+  "Face name to use for reference link titles.")
+
+(defvar thumb-through-comment-face 'thumb-through-comment-face
+  "Face name to use for HTML comments.")
+
+(defvar thumb-through-math-face 'thumb-through-math-face
+  "Face name to use for LaTeX expressions.")
+
+(defcustom thumb-through-uri-types
+  '("acap" "cid" "data" "dav" "fax" "file" "ftp" "gopher" "http" "https"
+    "imap" "ldap" "mailto" "mid" "modem" "news" "nfs" "nntp" "pop" "prospero"
+    "rtsp" "service" "sip" "tel" "telnet" "tip" "urn" "vemmi" "wais")
+  "Link types for syntax highlighting of URIs."
+  :group 'thumb-through
+  :type 'list)
+
+(defgroup thumb-through-faces nil
+  "Faces used in Markdown Mode"
+  :group 'thumb-through
+  :group 'faces)
+
+(defface thumb-through-italic-face
+  '((t :inherit font-lock-variable-name-face :italic t))
+  "Face for italic text."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-bold-face
+  '((t :inherit font-lock-variable-name-face :bold t))
+  "Face for bold text."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-header-face
+  '((t :inherit font-lock-function-name-face :weight bold))
+  "Base face for headers."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-header-face-1
+  '((t :inherit thumb-through-header-face))
+  "Face for level-1 headers."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-header-face-2
+  '((t :inherit thumb-through-header-face))
+  "Face for level-2 headers."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-header-face-3
+  '((t :inherit thumb-through-header-face))
+  "Face for level-3 headers."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-header-face-4
+  '((t :inherit thumb-through-header-face))
+  "Face for level-4 headers."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-header-face-5
+  '((t :inherit thumb-through-header-face))
+  "Face for level-5 headers."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-header-face-6
+  '((t :inherit thumb-through-header-face))
+  "Face for level-6 headers."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-inline-code-face
+  '((t :inherit font-lock-constant-face))
+  "Face for inline code."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-list-face
+  '((t :inherit font-lock-builtin-face))
+  "Face for list item markers."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-blockquote-face
+  '((t :inherit font-lock-doc-face))
+  "Face for blockquote sections."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-pre-face
+  '((t :inherit font-lock-constant-face))
+  "Face for preformatted text."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-link-face
+  '((t :inherit font-lock-keyword-face))
+  "Face for links."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-reference-face
+  '((t :inherit font-lock-type-face))
+  "Face for link references."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-url-face
+  '((t :inherit font-lock-string-face))
+  "Face for URLs."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-link-title-face
+  '((t :inherit font-lock-comment-face))
+  "Face for reference link titles."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-comment-face
+  '((t :inherit font-lock-comment-face))
+  "Face for HTML comments."
+  :group 'thumb-through-faces)
+
+(defface thumb-through-math-face
+  '((t :inherit font-lock-string-face))
+  "Face for LaTeX expressions."
+  :group 'thumb-through-faces)
+
+(defconst thumb-through-regex-link-inline
+  "\\(!?\\[[^]]*?\\]\\)\\(([^\\)]*)\\)"
+  "Regular expression for a [text](file) or an image link ![text](file).")
+
+(defconst thumb-through-regex-link-reference
+  "\\(!?\\[[^]]+?\\]\\)[ ]?\\(\\[[^]]*?\\]\\)"
+  "Regular expression for a reference link [text][id].")
+
+(defconst thumb-through-regex-reference-definition
+  "^ \\{0,3\\}\\(\\[.+?\\]\\):\\s *\\(.*?\\)\\s *\\( \"[^\"]*\"$\\|$\\)"
+  "Regular expression for a link definition [id]: ...")
+
+(defconst thumb-through-regex-header-1-atx
+  "^\\(# \\)\\(.*?\\)\\($\\| #+$\\)"
+  "Regular expression for level 1 atx-style (hash mark) headers.")
+
+(defconst thumb-through-regex-header-2-atx
+  "^\\(## \\)\\(.*?\\)\\($\\| #+$\\)"
+  "Regular expression for level 2 atx-style (hash mark) headers.")
+
+(defconst thumb-through-regex-header-3-atx
+  "^\\(### \\)\\(.*?\\)\\($\\| #+$\\)"
+  "Regular expression for level 3 atx-style (hash mark) headers.")
+
+(defconst thumb-through-regex-header-4-atx
+  "^\\(#### \\)\\(.*?\\)\\($\\| #+$\\)"
+  "Regular expression for level 4 atx-style (hash mark) headers.")
+
+(defconst thumb-through-regex-header-5-atx
+  "^\\(##### \\)\\(.*?\\)\\($\\| #+$\\)"
+  "Regular expression for level 5 atx-style (hash mark) headers.")
+
+(defconst thumb-through-regex-header-6-atx
+  "^\\(###### \\)\\(.*?\\)\\($\\| #+$\\)"
+  "Regular expression for level 6 atx-style (hash mark) headers.")
+
+(defconst thumb-through-regex-header-1-setext
+  "^\\(.*\\)\n\\(===+\\)$"
+  "Regular expression for level 1 setext-style (underline) headers.")
+
+(defconst thumb-through-regex-header-2-setext
+  "^\\(.*\\)\n\\(---+\\)$"
+  "Regular expression for level 2 setext-style (underline) headers.")
+
+(defconst thumb-through-regex-hr
+  "^\\(\\*[ ]?\\*[ ]?\\*[ ]?[\\* ]*\\|-[ ]?-[ ]?-[--- ]*\\)$"
+  "Regular expression for matching Markdown horizontal rules.")
+
+(defconst thumb-through-regex-code
+  "\\(^\\|[^\\]\\)\\(\\(`\\{1,2\\}\\)\\([^ \\]\\|[^ ].*?[^ \\]\\)\\3\\)"
+  "Regular expression for matching inline code fragments.")
+
+(defconst thumb-through-regex-pre
+  "^\\(    \\|\t\\).*$"
+  "Regular expression for matching preformatted text sections.")
+
+(defconst thumb-through-regex-list
+  "^[ \t]*\\([0-9]+\\.\\|[\\*\\+-]\\) "
+  "Regular expression for matching list markers.")
+
+(defconst thumb-through-regex-bold
+  "\\(^\\|[^\\]\\)\\(\\([*_]\\{2\\}\\)\\(.\\|\n\\)*?[^\\ ]\\3\\)"
+  "Regular expression for matching bold text.")
+
+(defconst thumb-through-regex-italic
+  "\\(^\\|[^\\]\\)\\(\\([*_]\\)\\([^ \\]\\3\\|[^ ]\\(.\\|\n\\)*?[^\\ ]\\3\\)\\)"
+  "Regular expression for matching italic text.")
+
+(defconst thumb-through-regex-blockquote
+  "^>.*$"
+  "Regular expression for matching blockquote lines.")
+
+(defconst thumb-through-regex-line-break
+  "  $"
+  "Regular expression for matching line breaks.")
+
+(defconst thumb-through-regex-wiki-link
+  "\\[\\[[^]]+\\]\\]"
+  "Regular expression for matching wiki links.")
+
+(defconst thumb-through-regex-uri
+  (concat
+   "\\(" (mapconcat 'identity thumb-through-uri-types "\\|")
+   "\\):[^]\t\n\r<>,;() ]+")
+  "Regular expression for matching inline URIs.")
+
+(defvar thumb-through-mode-font-lock-keywords
+  (list
+   (cons thumb-through-regex-code '(2 thumb-through-inline-code-face))
+   (cons thumb-through-regex-pre 'thumb-through-pre-face)
+   (cons thumb-through-regex-blockquote 'thumb-through-blockquote-face)
+   (cons thumb-through-regex-header-1-setext 'thumb-through-header-face-1)
+   (cons thumb-through-regex-header-2-setext 'thumb-through-header-face-2)
+   (cons thumb-through-regex-header-1-atx 'thumb-through-header-face-1)
+   (cons thumb-through-regex-header-2-atx 'thumb-through-header-face-2)
+   (cons thumb-through-regex-header-3-atx 'thumb-through-header-face-3)
+   (cons thumb-through-regex-header-4-atx 'thumb-through-header-face-4)
+   (cons thumb-through-regex-header-5-atx 'thumb-through-header-face-5)
+   (cons thumb-through-regex-header-6-atx 'thumb-through-header-face-6)
+   (cons thumb-through-regex-hr 'thumb-through-header-face)
+   (cons thumb-through-regex-list 'thumb-through-list-face)
+   (cons thumb-through-regex-link-inline
+         '((1 thumb-through-link-face t)
+           (2 thumb-through-url-face t)))
+   (cons thumb-through-regex-link-reference
+         '((1 thumb-through-link-face t)
+           (2 thumb-through-reference-face t)))
+   (cons thumb-through-regex-reference-definition
+         '((1 thumb-through-reference-face t)
+           (2 thumb-through-url-face t)
+           (3 thumb-through-link-title-face t)))
+   (cons thumb-through-regex-wiki-link 'thumb-through-link-face)
+   (cons thumb-through-regex-bold '(2 thumb-through-bold-face))
+   (cons thumb-through-regex-italic '(2 thumb-through-italic-face))))
+
+(defvar thumb-through-mode-syntax-table
+  (let ((thumb-through-mode-syntax-table (make-syntax-table)))
+    (modify-syntax-entry ?\" "w" thumb-through-mode-syntax-table)
+    thumb-through-mode-syntax-table))
 
 (defun thumb-through-get-url ()
   (or (thing-at-point 'url) (read-string "URL: ")))
@@ -52,15 +341,23 @@
     (if url
         (with-current-buffer (get-buffer-create "*thumb-through-output*")
           (let ((contents (thumb-through-get-page url)))
+            (setq buffer-read-only nil)
             (kill-region (point-min) (point-max))
             (insert contents)
             (switch-to-buffer (current-buffer))
-            (goto-line 1)))
+            (thumb-through-mode)
+            (goto-line 1)
+            (setq buffer-read-only t)))
       (message "No url found."))))
 
 (defun thumb-through-region (begin end)
   (interactive "r")
   (thumb-through (buffer-substring begin end)))
+
+(define-derived-mode thumb-through-mode text-mode "thumb through"
+  (set (make-local-variable 'font-lock-defaults)
+       '(thumb-through-mode-font-lock-keywords))
+  (set (make-local-variable 'font-lock-multiline) t))
 
 (provide 'thumb-through)
 
