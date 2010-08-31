@@ -5,7 +5,7 @@
 ;; Markdown style formatting
 ;; Copyright (C) 2007, 2008, 2009 Jason Blevins
 
-;; Version: 0.2
+;; Version: 0.3
 ;; Keywords: html
 
 ;; This file is NOT part of GNU Emacs
@@ -104,7 +104,7 @@
   :type 'list)
 
 (defgroup thumb-through-faces nil
-  "Faces used in Markdown Mode"
+  "Faces used in Thumb Through Mode"
   :group 'thumb-through
   :group 'faces)
 
@@ -124,32 +124,32 @@
   :group 'thumb-through-faces)
 
 (defface thumb-through-header-face-1
-  '((t :inherit thumb-through-header-face))
+  '((t :inherit thumb-through-header-face :height 1.4))
   "Face for level-1 headers."
   :group 'thumb-through-faces)
 
 (defface thumb-through-header-face-2
-  '((t :inherit thumb-through-header-face))
+  '((t :inherit thumb-through-header-face :height 1.25))
   "Face for level-2 headers."
   :group 'thumb-through-faces)
 
 (defface thumb-through-header-face-3
-  '((t :inherit thumb-through-header-face))
+  '((t :inherit thumb-through-header-face :height 1.1))
   "Face for level-3 headers."
   :group 'thumb-through-faces)
 
 (defface thumb-through-header-face-4
-  '((t :inherit thumb-through-header-face))
+  '((t :inherit thumb-through-header-face :height 1.0))
   "Face for level-4 headers."
   :group 'thumb-through-faces)
 
 (defface thumb-through-header-face-5
-  '((t :inherit thumb-through-header-face))
+  '((t :inherit thumb-through-header-face :height .9))
   "Face for level-5 headers."
   :group 'thumb-through-faces)
 
 (defface thumb-through-header-face-6
-  '((t :inherit thumb-through-header-face))
+  '((t :inherit thumb-through-header-face :height .8))
   "Face for level-6 headers."
   :group 'thumb-through-faces)
 
@@ -290,33 +290,54 @@
   "Regular expression for matching inline URIs.")
 
 (defvar thumb-through-mode-font-lock-keywords
-  (list
-   (cons thumb-through-regex-code '(2 thumb-through-inline-code-face))
-   (cons thumb-through-regex-pre 'thumb-through-pre-face)
-   (cons thumb-through-regex-blockquote 'thumb-through-blockquote-face)
-   (cons thumb-through-regex-header-1-setext 'thumb-through-header-face-1)
-   (cons thumb-through-regex-header-2-setext 'thumb-through-header-face-2)
-   (cons thumb-through-regex-header-1-atx 'thumb-through-header-face-1)
-   (cons thumb-through-regex-header-2-atx 'thumb-through-header-face-2)
-   (cons thumb-through-regex-header-3-atx 'thumb-through-header-face-3)
-   (cons thumb-through-regex-header-4-atx 'thumb-through-header-face-4)
-   (cons thumb-through-regex-header-5-atx 'thumb-through-header-face-5)
-   (cons thumb-through-regex-header-6-atx 'thumb-through-header-face-6)
-   (cons thumb-through-regex-hr 'thumb-through-header-face)
-   (cons thumb-through-regex-list 'thumb-through-list-face)
-   (cons thumb-through-regex-link-inline
-         '((1 thumb-through-link-face t)
-           (2 thumb-through-url-face t)))
-   (cons thumb-through-regex-link-reference
-         '((1 thumb-through-link-face t)
-           (2 thumb-through-reference-face t)))
-   (cons thumb-through-regex-reference-definition
-         '((1 thumb-through-reference-face t)
-           (2 thumb-through-url-face t)
-           (3 thumb-through-link-title-face t)))
-   (cons thumb-through-regex-wiki-link 'thumb-through-link-face)
-   (cons thumb-through-regex-bold '(2 thumb-through-bold-face))
-   (cons thumb-through-regex-italic '(2 thumb-through-italic-face))))
+  `((,thumb-through-regex-code 
+     (2 '(face thumb-through-inline-code-face)))
+    (,thumb-through-regex-pre . 'thumb-through-pre-face)
+    (,thumb-through-regex-blockquote . 'thumb-through-blockquote-face)
+    (,thumb-through-regex-header-1-setext . 'thumb-through-header-face-1)
+    (,thumb-through-regex-header-2-setext . 'thumb-through-header-face-2)
+    (,thumb-through-regex-header-1-atx 
+     (1 '(face nil invisible t))
+     (2 '(face thumb-through-header-face-1))
+     (3 '(face nil invisible t)))
+    (,thumb-through-regex-header-2-atx 
+     (1 '(face nil invisible t))
+     (2 '(face thumb-through-header-face-2))
+     (3 '(face nil invisible t)))
+    (,thumb-through-regex-header-3-atx 
+     (1 '(face nil invisible t))
+     (2 '(face thumb-through-header-face-3))
+     (3 '(face nil invisible t)))
+    (,thumb-through-regex-header-4-atx 
+     (1 '(face nil invisible t))
+     (2 '(face thumb-through-header-face-4))
+     (3 '(face nil invisible t)))
+    (,thumb-through-regex-header-5-atx 
+     (1 '(face nil invisible t))
+     (2 '(face thumb-through-header-face-5))
+     (3 '(face nil invisible t)))
+    (,thumb-through-regex-header-6-atx 
+     (1 '(face nil invisible t))
+     (2 '(face thumb-through-header-face-6))
+     (3 '(face nil invisible t)))
+    (,thumb-through-regex-hr 'thumb-through-header-face)
+    (,thumb-through-regex-list 'thumb-through-list-face)
+    (,thumb-through-regex-link-inline
+     '((1 '(face thumb-through-link-face))
+       (2 '(face thumb-through-url-face))))
+    (,thumb-through-regex-link-reference
+     (1 '(face thumb-through-link-face) )
+     (2 '(face thumb-through-reference-face)))
+    (,thumb-through-regex-reference-definition
+     (1 '(face thumb-through-reference-face))
+     (2 '(face thumb-through-url-face) )
+     (3 '(face thumb-through-link-title-face)))
+    (,thumb-through-regex-wiki-link . 'thumb-through-link-face)
+    (,thumb-through-regex-bold
+     (2 '(face thumb-through-bold-face)))
+    (,thumb-through-regex-italic 
+     (2 '(face thumb-through-italic-face)))))
+
 
 (defvar thumb-through-mode-syntax-table
   (let ((thumb-through-mode-syntax-table (make-syntax-table)))
