@@ -35,7 +35,7 @@
 (require 'font-lock)
 
 (defconst thumb-through-curl-executable (executable-find "curl"))
-(defconst thumb-through-service-url 
+(defconst thumb-through-service-url
   "http://textplease.appspot.com/text/extract.md?url=")
 
 (defvar thumb-through-italic-face 'thumb-through-italic-face
@@ -290,33 +290,33 @@
   "Regular expression for matching inline URIs.")
 
 (defvar thumb-through-mode-font-lock-keywords
-  `((,thumb-through-regex-code 
+  `((,thumb-through-regex-code
      (2 '(face thumb-through-inline-code-face)))
     (,thumb-through-regex-pre . 'thumb-through-pre-face)
     (,thumb-through-regex-blockquote . 'thumb-through-blockquote-face)
     (,thumb-through-regex-header-1-setext . 'thumb-through-header-face-1)
     (,thumb-through-regex-header-2-setext . 'thumb-through-header-face-2)
-    (,thumb-through-regex-header-1-atx 
+    (,thumb-through-regex-header-1-atx
      (1 '(face nil invisible t))
      (2 '(face thumb-through-header-face-1))
      (3 '(face nil invisible t)))
-    (,thumb-through-regex-header-2-atx 
+    (,thumb-through-regex-header-2-atx
      (1 '(face nil invisible t))
      (2 '(face thumb-through-header-face-2))
      (3 '(face nil invisible t)))
-    (,thumb-through-regex-header-3-atx 
+    (,thumb-through-regex-header-3-atx
      (1 '(face nil invisible t))
      (2 '(face thumb-through-header-face-3))
      (3 '(face nil invisible t)))
-    (,thumb-through-regex-header-4-atx 
+    (,thumb-through-regex-header-4-atx
      (1 '(face nil invisible t))
      (2 '(face thumb-through-header-face-4))
      (3 '(face nil invisible t)))
-    (,thumb-through-regex-header-5-atx 
+    (,thumb-through-regex-header-5-atx
      (1 '(face nil invisible t))
      (2 '(face thumb-through-header-face-5))
      (3 '(face nil invisible t)))
-    (,thumb-through-regex-header-6-atx 
+    (,thumb-through-regex-header-6-atx
      (1 '(face nil invisible t))
      (2 '(face thumb-through-header-face-6))
      (3 '(face nil invisible t)))
@@ -335,7 +335,7 @@
     (,thumb-through-regex-wiki-link . 'thumb-through-link-face)
     (,thumb-through-regex-bold
      (2 '(face thumb-through-bold-face)))
-    (,thumb-through-regex-italic 
+    (,thumb-through-regex-italic
      (2 '(face thumb-through-italic-face)))))
 
 
@@ -383,3 +383,4 @@
   (set (make-local-variable 'font-lock-multiline) t))
 
 (provide 'thumb-through)
+;;; thumb-through.el ends here
