@@ -383,3 +383,4 @@
   (set (make-local-variable 'font-lock-multiline) t))
 
 (provide 'thumb-through)
+;;; thumb-through.el ends here
